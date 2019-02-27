@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Splitting Query String</title>
+    <link rel="icon" type="image/png" href="../images/favicon.png" />
+    <style>
+        body {
+            font-family: Arial;
+            font-size: 90%;
+            padding: 0px 10px;
+        }
+
+        table {
+            margin-bottom: 0.2em;
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+
+        th {
+            padding: 5px;
+            background-color: #555;
+            color: #6f6;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .button {
+            border: 0;
+            border-radius: 4px;
+            width: 60px;
+            color: white;
+            opacity: 0.7;
+            padding: 3px 5px;
+            text-align: center;
+            background-color: #282;
+            transition-duration: 0.4s;
+            box-shadow: 0 2px 6px 0 rgba(0,0,0,0.24),0 7px 10px 0 rgba(0,0,0,0.19);
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+
+            .button:hover {
+                opacity: 1;
+                transform: scale(1.04);
+            }
+    </style>
+    <script src="../js/Kit.js"></script>
+    <script>
+		function Parse()
+		{
+			let
+				form = $("form"),
+				sp = $("span", 0, 0, form),
+				qs = document.location.search,  // Query String
+				page = document.referrer;
+			if (page)
+			{
+				let btn = $("input", 0, "type=submit;value=Go Back;className=button;");
+				btn.onclick = () => window.location = page;
+			}
+			if (qs.length == 0)
+			{
+				sp.innerHTML = "This page parses OueryString<br>OueryString is empty.";
+				return;
+			}
+			let
+				htm = "<h3>Query parameters</h3><table><tr><th><b>Key</b></th><th><b>Value</b></th></tr>",
+				pp = qs.substr(1).split("&");
+			for (let i = 0; i < pp.length; i++)
+			{
+				let
+					p = pp[i].split("="),
+					key = unescape(p[0]),
+					val = unescape(p[1].replace(/\+/g, " "));
+				htm += `<tr><td>${key}</td><td>${val}</td></tr>`;
+			}
+			htm += "</table>";
+			sp.innerHTML = htm;
+		}
+		onload = Parse;
+    </script>
+</head>
+<body>
+</body>
+</html>

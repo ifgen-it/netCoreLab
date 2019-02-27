@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Balls</title>
+    <link rel="icon" type="image/png" href="../images/favicon.png" />
+    <style>
+        body {
+            font-family: Trebuchet MS;
+            padding: 1em;
+        }
+
+        span {
+            color: red;
+            font-weight: bold;
+            font-size: large;
+            margin-left: 4em;
+        }
+
+        .button {
+            border: 0;
+            border-radius: 8px;
+            color: white;
+            padding: 10px 22px;
+            text-align: center;
+            background-color: #f44;
+            transition-duration: 0.4s;
+            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+            opacity: 0.7;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1.1em;
+            margin: 4px 4px;
+            cursor: pointer;
+        }
+
+            .button:hover {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+    </style>
+    <script src="../js/Kit.js"></script>
+    <script>
+		class Ball
+		{
+			constructor(w, h)
+			{
+				this.rad = 6;
+				this.min = this.rad;
+				this.max = 32;
+				this.maxX = w - this.rad;
+				this.maxY = h - this.rad;
+				this.grow = true;
+				this.pi2 = 2 * Math.PI;
+				this.x = this.Rand(32, w - 32);
+				this.y = this.Rand(32, h - 32);
+			}
+			Rand(min, max) { return Math.round(min + Math.random() * (max - min)); }
+			RandClr()
+			{
+				var c = '#';
+				for (let i = 0; i < 3; i++)
+					c += "0123456789abcdef"[this.Rand(0, 15)];
+				return c;
+			}
+
+			Move()
+			{
+				this.x += (Math.random() >= 0.5 ? 1 : -1);
+				this.y += (Math.random() >= 0.5 ? 1 : -1);
+				if (this.x < 0)
+					this.x += 2;
+				else if (this.x > this.maxX)
+					this.x -= 2;
+				if (this.y < 0)
+					this.y += 2;
+				else if (this.y > this.maxY)
+					this.y -= 2;
+				this.rad += this.grow ? 0.75 : -0.75;
+				if (this.rad < this.min || this.max < this.rad)
+					this.grow = !this.grow;
+			}
+			Draw(dc)
+			{
+				this.Move();
+				dc.beginPath();
+				dc.arc(this.x, this.y, this.rad, 0, this.pi2);
+				dc.closePath();
+				dc.fillStyle = this.RandClr();
+				dc.fill();
+				dc.lineWidth = this.rad * 0.1;
+				dc.strokeStyle = "#030";
+				dc.stroke();
+			}
+		}
+
+		class Game
+		{
+			constructor()
+			{
+				this.timerMove = null;
+				this.timerStop = null;
+				this.ballsCount = 7;
+				this.balls = new Array(this.ballsCount);
+				this.dc = null;
+				this.w = 800;
+				this.h = 400;
+				this.tick = 70;
+				this.score = 0;
+				this.msg = null;
+				this.btnNew = null;
+				this.SetHtml();
+				this.Start();
+			}
+
+			SetHtml()
+			{
+				let canvas = $("canvas", "border=1px solid #aaa;", `width=${this.w};height=${this.h}`);
+				$("br");
+				this.dc = canvas.getContext("2d");
+				this.dc.font = "25px Trebuchet MS";
+				this.SetBalls();
+				this.btnNew = $("input", null, "type=button;value=New Game;className=button;");
+				this.btnNew.onclick = () => this.Reset();
+				this.msg = $("span");
+				canvas.onmousedown = (e) => this.OnMouseDown(e);
+			}
+			Reset()
+			{
+				clearTimeout(this.timerStop);
+				clearInterval(this.timerMove);
+				this.msg.innerText = "";
+				this.score = 0;
+				this.balls.length = 0;
+				this.SetBalls();
+				this.Start();
+			}
+			OnMouseDown(e)
+			{
+				if (this.balls.length === 0)
+					this.Stop();
+				let
+					x = e.x - e.target.offsetLeft,
+					y = e.y - e.target.offsetTop;
+				for (let i = 0; i < this.balls.length; i++)
+				{
+					let b = this.balls[i];
+					if (Math.abs(x - b.x) < b.rad && Math.abs(y - b.y) < b.rad)
+					{
+						this.balls.splice(i, 1);
+						this.score++;
+						e.stopPropagation();
+						e.preventDefault();
+						return;
+					}
+				}
+			}
+			SetBalls()
+			{
+				for (let b, i = 0; i < this.ballsCount; i++)
+				{
+					this.balls[i] = b = new Ball(this.w, this.h);
+					b.Draw(this.dc);
+				}
+			}
+			Start()
+			{
+				this.timerMove = setInterval(() =>
+				{
+					this.dc.clearRect(0, 0, this.w, this.h);
+					this.dc.fillStyle = "#009";
+					this.dc.fillText("Test your agility", 300, 30);
+					this.balls.forEach((b) => b.Draw.call(b, this.dc));
+				}, this.tick);
+				this.timerStop = setTimeout(() => this.Stop(), this.ballsCount * 650);
+			}
+			Stop()
+			{
+				clearInterval(this.timerMove);
+				this.msg.innerText = `Result: ${Math.round(this.score * 100 / this.ballsCount)}%`;
+			}
+		}
+
+		onload = () => new Game();
+    </script>
+</head>
+<body>
+</body>
+</html>

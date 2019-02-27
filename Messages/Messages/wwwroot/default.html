@@ -1,15 +1,65 @@
 ﻿<html>
 <head>
+    <meta charset="utf-8" />
     <title>Default</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="css/Site.css" rel="stylesheet">
+    <script src="../js/Kit.js"></script>
     <script>
-			onload = () =>
-			{
-				spDay.innerHTML=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
-			}
+        onload = () => {
+            start.onclick = () => location.href = 'html/Start.html';
+            frm.onclick = () => location.href = 'html/Form.html';
+            frmJS.onclick = () => location.href = 'html/FormJS.html';
+            frmEl.onclick = () => location.href = 'html/FormElements.html';
+            frmM.onclick = () => location.href = 'html/FormModal.html';
+            calc.onclick = () => location.href = 'html/Calculator.html';
+            split.onclick = () => location.href = 'html/SplitQuery.html';
+            ball.onclick = () => location.href = 'html/Balls.html';
+            zoo.onclick = () => location.href = 'html/Zoo.html';
+            tb.onclick = () => location.href = 'html/Toolbar.html';
+            tbd.onclick = () => location.href = 'html/ToolbarDyn.html';
+            dnd.onclick = () => location.href = 'html/DnD.html';
+            sna.onclick = () => location.href = 'html/Snake.html';
+            evp.onclick = () => location.href = 'html/EventPropagation.html';
+            frs.onclick = () => location.href = 'html/Forest.html';
+            chess.onclick = () => location.href = 'html/Chess.html';
+            clock.onclick = () => location.href = 'html/Clock.html';
+            cSty.onclick = () => location.href = 'html/ClockStyled.html';
+            mEv.onclick = () => location.href = 'html/Event00.html';
+            ajx.onclick = () => location.href = 'html/AjaxFetcher.html';
+            err.onclick = () => location.href = 'Nosite.html';
+            spDay.innerHTML = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Satur-day'][new Date().getDay()];
+        }
     </script>
 </head>
 <body>
-    <h1>Using File Server</h1>
+    <h1>Select a sample</h1>
+    <form>
+        <ul>
+            <li id="start">Start</li>
+            <li id="frm">Form</li>
+            <li id="frmJS">Form created by JS</li>
+            <li id="frmEl">Form Elements</li>
+            <li id="frmM">Form Modal</li>
+            <li id="calc">Calculator</li>
+            <li id="split">Split Query</li>
+            <li id="ball">Balls</li>
+            <li id="zoo">Zoo</li>
+            <li id="tb">Toolbar</li>
+            <li id="tbd">Toolbar Dynamic</li>
+            <li id="dnd">Drag and Drop</li>
+            <li id="sna">Snake</li>
+            <li id="evp">Event Propagation</li>
+            <li id="frs">Forest</li>
+            <li id="chess">Chess</li>
+            <li id="clock">Clock</li>
+            <li id="cSty">Clock Styled</li>
+            <li id="mEv">Mouse Events</li>
+            <li id="ajx">Ajax Fetcher</li>
+            <li id="err">Imitate 404</li>
+        </ul>
+    </form>
     Today is <span id="spDay"></span><br>
+    <a class="link" href="/Index">Go to MVC</a>
 </body>
 </html>
